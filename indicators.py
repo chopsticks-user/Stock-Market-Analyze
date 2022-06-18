@@ -55,20 +55,22 @@ class Indicators(object):
     def recent_highest(self, period):
         period_data = list(itertools.islice(self.market_data, max(0, self.memory_count - period + 1), self.memory_count + 1))
         highest = period_data[0][2]
+        begin = max(0, self.memory_count - period + 1)
         index = max(0, self.memory_count - period + 1)
         for i in range(1, len(period_data)):
             if highest <= period_data[i][3]:
-                index = i
+                index = begin + i
                 highest = period_data[i][3]
         return [index, highest]
 
     def recent_lowest(self, period):
         period_data = list(itertools.islice(self.market_data, max(0, self.memory_count - period + 1), self.memory_count + 1))
         lowest = period_data[0][3]
+        begin = max(0, self.memory_count - period + 1)
         index = max(0, self.memory_count - period + 1)
         for i in range(1, len(period_data)):
             if lowest >= period_data[i][3]:
-                index = i
+                index = begin + i
                 lowest = period_data[i][3]
         return [index, lowest]
 
