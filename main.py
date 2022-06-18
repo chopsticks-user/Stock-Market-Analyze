@@ -38,6 +38,8 @@ if __name__ == "__main__":
     #     sns.displot(data[c][4000:])
     #     plt.show(block = True)
 
+    #asd
+
     
 
     
