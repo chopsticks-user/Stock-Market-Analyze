@@ -28,8 +28,7 @@ if __name__ == "__main__":
 
     indicators = Indicators(len(data), [20, 50, 200])
     for i in range(len(data)):
-        print(indicators.update(*transposed_data[i]))
-        #time.sleep(2)
+        indicators.update(*transposed_data[i])
     print(indicators.memory_count)
 
     # sns.displot(data[["Close"]][4421:])
