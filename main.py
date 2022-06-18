@@ -25,17 +25,18 @@ if __name__ == "__main__":
     print(data.columns)
     print(data.dtypes)
     print(data.describe(include = "all", percentiles = [.25, .5, .75, .9, .99]))
-    # sns.displot(data[["Close"]][4421:])
-    # plt.show(block = True)
-    # for c in data.columns[1:]:
-    #     sns.displot(data[c][4000:])
-    #     plt.show(block = True)
 
     indicators = Indicators(len(data), [20, 50, 200])
     for i in range(len(data)):
         print(indicators.update(*transposed_data[i]))
         #time.sleep(2)
     print(indicators.memory_count)
+
+    # sns.displot(data[["Close"]][4421:])
+    # plt.show(block = True)
+    # for c in data.columns[1:]:
+    #     sns.displot(data[c][4000:])
+    #     plt.show(block = True)
 
     
 
