@@ -116,8 +116,7 @@ class Indicators(object):
         return 1 - lowest_point_dist / period
 
     def __macd__(self):
-        macd = self.indicators_data["EMA {}".format(self.periods[0])][-1] - self.indicators_data["EMA {}".format(self.periods[1])][-1]
-        return macd
+        return self.indicators_data["EMA {}".format(self.periods[0])][-1] - self.indicators_data["EMA {}".format(self.periods[1])][-1]
 
     # def signal(self, last_signal, current_price):
     #     return self.macd()
