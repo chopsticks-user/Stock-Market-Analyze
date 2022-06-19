@@ -20,13 +20,13 @@ class Indicators(object):
         # 0: time, 1: open, 2: high, 3: low, 4: close, 5: volume
         self.capacity = capacity
         self.market_data = deque([], maxlen = capacity)
-        self.indicators_list = []
+        self.list = []
         for i in range(self.n_periods):
-            self.indicators_list.append("SMA {}".format(self.periods[i]))
-            self.indicators_list.append("WMA {}".format(self.periods[i]))
-            self.indicators_list.append("EMA {}".format(self.periods[i]))
-        self.indicators_list.extend(["Aroon Up", "Aroon Down", "MACD", "Momentum", "Stoch K", "Stoch D", "William R", "AD"])
-        self.indicators_data = {
+            self.list.append("SMA {}".format(self.periods[i]))
+            self.list.append("WMA {}".format(self.periods[i]))
+            self.list.append("EMA {}".format(self.periods[i]))
+        self.list.extend(["Aroon Up", "Aroon Down", "MACD", "Momentum", "Stoch K", "Stoch D", "William R", "AD"])
+        self.data = {
             "SMA {}".format(self.periods[0]): deque(maxlen = capacity), 
             "WMA {}".format(self.periods[0]): deque(maxlen = capacity), 
             "EMA {}".format(self.periods[0]): deque(maxlen = capacity), 
@@ -58,22 +58,22 @@ class Indicators(object):
 
         if self.memory_count > 0:
             for i in range(self.n_periods):
-                self.indicators_data["SMA {}".format(self.periods[i])].append(self.__sma__(self.periods[i], self.indicators_data["SMA {}".format(self.periods[i])][-1], close))
-                self.indicators_data["WMA {}".format(self.periods[i])].append(self.__wma__(self.periods[i], self.indicators_data["WMA {}".format(self.periods[i])][-1], close))
-                self.indicators_data["EMA {}".format(self.periods[i])].append(self.__ema__(self.periods[i], self.indicators_data["EMA {}".format(self.periods[i])][-1], close))
+                self.data["SMA {}".format(self.periods[i])].append(self.__sma__(self.periods[i], self.data["SMA {}".format(self.periods[i])][-1], close))
+                self.data["WMA {}".format(self.periods[i])].append(self.__wma__(self.periods[i], self.data["WMA {}".format(self.periods[i])][-1], close))
+                self.data["EMA {}".format(self.periods[i])].append(self.__ema__(self.periods[i], self.data["EMA {}".format(self.periods[i])][-1], close))
         else:
             for i in range(self.n_periods):
-                self.indicators_data["SMA {}".format(self.periods[i])].append(close)
-                self.indicators_data["WMA {}".format(self.periods[i])].append(close)
-                self.indicators_data["EMA {}".format(self.periods[i])].append(close)
-        self.indicators_data["Aroon Up"].append(self.__aroon_up__(self.periods[0], self.memory_count - self.highest_in_period[0][0]))
-        self.indicators_data["Aroon Down"].append(self.__aroon_down__(self.periods[0], self.memory_count - self.lowest_in_period[0][0]))
-        self.indicators_data["MACD"].append(self.__macd__())
-        self.indicators_data["Momentum"].append(self.__momentum__(open, close))
-        self.indicators_data["Stoch K"].append(self.__stoch_k__(self.highest_in_period[0][1], self.lowest_in_period[0][1], self.current_price))
-        self.indicators_data["Stoch D"].append(self.__stoch_d__(self.periods[0], self.indicators_data["Stoch K"][-1], self.highest_in_period[0][1], self.lowest_in_period[0][1], self.current_price))
-        self.indicators_data["William R"].append(self.__william_r__(self.highest_in_period[0][1], self.lowest_in_period[0][1], self.current_price))
-        self.indicators_data["AD"].append(self.__last_ad__(self.market_data[-1][2], self.market_data[-1][3], self.market_data[-1][4]))
+                self.data["SMA {}".format(self.periods[i])].append(close)
+                self.data["WMA {}".format(self.periods[i])].append(close)
+                self.data["EMA {}".format(self.periods[i])].append(close)
+        self.data["Aroon Up"].append(self.__aroon_up__(self.periods[0], self.memory_count - self.highest_in_period[0][0]))
+        self.data["Aroon Down"].append(self.__aroon_down__(self.periods[0], self.memory_count - self.lowest_in_period[0][0]))
+        self.data["MACD"].append(self.__macd__())
+        self.data["Momentum"].append(self.__momentum__(open, close))
+        self.data["Stoch K"].append(self.__stoch_k__(self.highest_in_period[0][1], self.lowest_in_period[0][1], self.current_price))
+        self.data["Stoch D"].append(self.__stoch_d__(self.periods[0], self.data["Stoch K"][-1], self.highest_in_period[0][1], self.lowest_in_period[0][1], self.current_price))
+        self.data["William R"].append(self.__william_r__(self.highest_in_period[0][1], self.lowest_in_period[0][1], self.current_price))
+        self.data["AD"].append(self.__last_ad__(self.market_data[-1][2], self.market_data[-1][3], self.market_data[-1][4]))
 
         self.memory_count += 1
 
@@ -116,7 +116,7 @@ class Indicators(object):
         return 1 - lowest_point_dist / period
 
     def __macd__(self):
-        return self.indicators_data["EMA {}".format(self.periods[0])][-1] - self.indicators_data["EMA {}".format(self.periods[1])][-1]
+        return self.data["EMA {}".format(self.periods[0])][-1] - self.data["EMA {}".format(self.periods[1])][-1]
 
     # def signal(self, last_signal, current_price):
     #     return self.macd()
@@ -125,16 +125,16 @@ class Indicators(object):
         return end_price - start_price
 
     def __stoch_k__(self, highest_in_period, lowest_in_period, current_price):
-        return (current_price - lowest_in_period) / (highest_in_period - lowest_in_period)
+        return (current_price - lowest_in_period) / (highest_in_period - lowest_in_period) if highest_in_period != lowest_in_period else np.NaN
 
     def __stoch_d__(self, period, last_stoch_k, highest_in_period, lowest_in_period, current_price):
         return (last_stoch_k * (period - 1) + self.__stoch_k__(highest_in_period, lowest_in_period, current_price) / period)
 
     def __william_r__(self, highest_in_period, lowest_in_period, current_price):
-        return (highest_in_period - current_price) / (highest_in_period - lowest_in_period)
+        return (highest_in_period - current_price) / (highest_in_period - lowest_in_period) if highest_in_period != lowest_in_period else np.NaN
 
     def __last_ad__(self, last_high, last_low, last_price):
-        return (last_high - last_price) / (last_high - last_low)
+        return (last_high - last_price) / (last_high - last_low) if last_high != last_low else np.NaN
 
     # def last_cci(self, period_data):
     #     period = 14     # = len(period_data)
