@@ -1,16 +1,16 @@
+from msilib import sequence
 import numpy as np
 import pandas as pd
+import torch as T
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pickle as pk
 import os
 import time
 
-import sklearn
 from indicators import Indicators
-from tools import change
-from sklearn import linear_model
-from sklearn.utils import shuffle
+from tools import change, train_load, train_save
+from model import LSTMModel
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 if __name__ == "__main__":
     stocks_path = "Stock/Data/Stocks"
@@ -18,81 +18,102 @@ if __name__ == "__main__":
     stocks_list = os.listdir(stocks_path)
     etfs_list = os.listdir(etfs_path)
 
-    data_path = stocks_path + "/" + stocks_list[0]
-    data = pd.read_csv(data_path)
-    data = data.drop(columns = ["OpenInt"])
-    data = data.dropna()
-    transposed_data = data.T
+    # print(inputs)
 
-    # print(transposed_data[0]["Close"])
-    # print(data.head())
-    # print(data.shape)
-    # print(data.columns)
-    # print(data.dtypes)
-    # print(data.describe(include = "all", percentiles = [.25, .5, .75, .9, .99]))
+    # corr = processed_data.corr()
+    # print(corr["Profit"])
 
-    indicators = Indicators(len(data), [20, 50, 200])
-    for i in range(len(data)):
-        indicators.update(*transposed_data[i])
-        #print(indicators.data["MACD"][-1])
+    # print(processed_data[["Profit"]])
 
-    indicators_list = indicators.list
+    model_path = "Load/Model/lstm_model_0619"
+    load = True
 
-    processed_data = pd.DataFrame({
-        "Profit": change(data["Close"]), 
-        "SMA 20": change(np.array((indicators.data["SMA 20"]))), 
-        "SMA 50": change(np.array((indicators.data["SMA 50"]))), 
-        "SMA 200": change(np.array((indicators.data["SMA 200"]))), 
-        "WMA 20": change(np.array((indicators.data["WMA 20"]))), 
-        "WMA 50": change(np.array((indicators.data["WMA 50"]))), 
-        "WMA 200": change(np.array((indicators.data["WMA 200"]))), 
-        "EMA 20": change(np.array((indicators.data["EMA 20"]))), 
-        "EMA 50": change(np.array((indicators.data["EMA 50"]))), 
-        "EMA 200": change(np.array((indicators.data["EMA 200"]))), 
-        "Aroon Up": change(np.array((indicators.data["Aroon Up"]))),  
-        "Aroon Down": change(np.array((indicators.data["Aroon Down"]))), 
-        "MACD": change(np.array((indicators.data["MACD"]))), 
-        "Momentum": change(np.array((indicators.data["Momentum"]))),  
-        "Stoch K": change(np.array((indicators.data["Stoch K"]))),  
-        "Stoch D": change(np.array((indicators.data["Stoch D"]))),  
-        "William R": change(np.array((indicators.data["William R"]))),  
-        "AD": change(np.array((indicators.data["AD"])))
-    })
-    #print(processed_data)
+    for stock_index in range(217, len(stocks_list)):
+        data_path = stocks_path + "/" + stocks_list[stock_index]
+        data = pd.read_csv(data_path)
+        data = data.drop(columns = ["OpenInt"])
+        data = data.dropna()
+        transposed_data = data.T
 
-    corr = processed_data.corr()
-    print(corr["Profit"])
+        # print(transposed_data[0]["Close"])
+        # print(data.head())
+        # print(data.shape)
+        # print(data.columns)
+        # print(data.dtypes)
+        # print(data.describe(include = "all", percentiles = [.25, .5, .75, .9, .99]))
 
-    drop_list = ["Profit"]
-    # for column in corr.columns[1:]:
-    #     if corr["Profit"][column] < 0.2:
-    #         drop_list.append(column)
-    
-    X = np.array(processed_data.drop(columns = drop_list))
-    y = np.array(processed_data[["Profit"]])
+        indicators = Indicators(len(data), [20, 50, 200])
+        for i in range(len(data)):
+            indicators.update(*transposed_data[i])
+            #print(indicators.data["MACD"][-1])
 
-    lin_reg = linear_model.LinearRegression()
-    X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(X, y, test_size = 0.5)
-    lin_reg.fit(X_train, y_train)
-    accuracy = lin_reg.score(X_test, y_test)
+        indicators_list = indicators.list
 
-    y_pred = lin_reg.predict(X_test)
-    errors = np.zeros(len(y_pred))
-    for i in range(len(y_pred)):
-        print("Predicted: {}, Value: {}, Error: {}%".format(y_pred[i], y_test[i], 
-        200 * abs((y_pred[i] - y_test[i]) / (y_pred[i] + y_test[i]))))
-        errors[i] = 200 * abs((y_pred[i] - y_test[i]) / (y_pred[i] + y_test[i]))
+        processed_data = pd.DataFrame({
+            "Profit": change(data["Close"]), 
+            "SMA 20": change(np.array((indicators.data["SMA 20"]))), 
+            "SMA 50": change(np.array((indicators.data["SMA 50"]))), 
+            "SMA 200": change(np.array((indicators.data["SMA 200"]))), 
+            "WMA 20": change(np.array((indicators.data["WMA 20"]))), 
+            "WMA 50": change(np.array((indicators.data["WMA 50"]))), 
+            "WMA 200": change(np.array((indicators.data["WMA 200"]))), 
+            "EMA 20": change(np.array((indicators.data["EMA 20"]))), 
+            "EMA 50": change(np.array((indicators.data["EMA 50"]))), 
+            "EMA 200": change(np.array((indicators.data["EMA 200"]))), 
+            "Aroon Up": change(np.array((indicators.data["Aroon Up"]))),  
+            "Aroon Down": change(np.array((indicators.data["Aroon Down"]))), 
+            "MACD": change(np.array((indicators.data["MACD"]))), 
+            "Momentum": change(np.array((indicators.data["Momentum"]))),  
+            "Stoch K": change(np.array((indicators.data["Stoch K"]))),  
+            "Stoch D": change(np.array((indicators.data["Stoch D"]))),  
+            "William R": change(np.array((indicators.data["William R"]))),  
+            "AD": change(np.array((indicators.data["AD"])))
+        })
 
-    print(accuracy)
-    errors = pd.DataFrame(errors)
-    print(errors.describe(include = "all", percentiles = [.25, .5, .75, .9, .99]))
+        if load:
+            lstm = train_load(model_path)
+        else:
+            lstm = LSTMModel(in_features_dim = len(indicators_list), hidden_dim = 32, out_features_dim = 1, file_path = model_path)
 
+        targets = T.tensor(np.array(processed_data[["Profit"]]), dtype = T.float).to(lstm.device)
+        inputs = T.tensor(np.array(processed_data.drop(columns = ["Profit"])), dtype = T.float).to(lstm.device)
 
+        # time.sleep(10)
+        average_loss = 0.0
+        average_mape = 0.0
+        total_step = 0
+        capital = 1000.0
+        position = 0.0
+        sequence_length = 10
+        future = 1
+        for index in range(sequence_length, len(processed_data) - future):
+            prediction = lstm.forward(inputs[index - sequence_length : index])
+            target = targets[index + future]
+            # if abs(target) < 0.005:
+            #     total_step -= 1
+            #     mape = 0.0
+            # else:
+            #     mape = abs((target - prediction) / target)
 
+            if target == 0.0:
+                total_step -= 1
+                mape = 0.0
+            else:
+                mape = abs((target - prediction) / target)
 
-    # sns.displot(errors)
-    # plt.axis([0.0, 1000, 0.0, 500])
-    # plt.show(block = True)
+            loss = lstm.backward(target)
+            average_loss += loss
+            average_mape += mape
+            total_step += 1
+            if total_step % 100 == 0:
+                print(f"    Targets = {targets[index + future]}, Predicted = {prediction}, mape = {mape}")
+                time.sleep(0.5)
+
+        average_loss /= total_step
+        average_mape /= total_step
+        print(f"Epoch: {stock_index}, Average Loss: {average_loss}, Average MAPE: {average_mape}")
+        train_save(lstm)
+
 
 
 

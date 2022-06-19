@@ -9,9 +9,6 @@ class Indicators(object):
     def __init__(self, capacity = 10000, periods = [14, 30, 100]):
         self.n_periods = 3
         self.periods = periods
-        # self.last_sma = {"SMA {}".format(self.periods[i]): [0.0] for i in range(self.n_periods)}
-        # self.last_wma = {"WMA {}".format(self.periods[i]): [0.0] for i in range(self.n_periods)}
-        # self.last_ema = {"EMA {}".format(self.periods[i]): [0.0] for i in range(self.n_periods)}
 
         # second dim: {0: pos, 1: value}
         self.highest_in_period = [[0, 0.0] for _ in range(self.n_periods)]
