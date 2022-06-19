@@ -125,16 +125,16 @@ class Indicators(object):
         return end_price - start_price
 
     def __stoch_k__(self, highest_in_period, lowest_in_period, current_price):
-        return (current_price - lowest_in_period) / (highest_in_period - lowest_in_period) if highest_in_period != lowest_in_period else np.NaN
+        return (current_price - lowest_in_period) / (highest_in_period - lowest_in_period) if highest_in_period != lowest_in_period else 0.0
 
     def __stoch_d__(self, period, last_stoch_k, highest_in_period, lowest_in_period, current_price):
         return (last_stoch_k * (period - 1) + self.__stoch_k__(highest_in_period, lowest_in_period, current_price) / period)
 
     def __william_r__(self, highest_in_period, lowest_in_period, current_price):
-        return (highest_in_period - current_price) / (highest_in_period - lowest_in_period) if highest_in_period != lowest_in_period else np.NaN
+        return (highest_in_period - current_price) / (highest_in_period - lowest_in_period) if highest_in_period != lowest_in_period else 0.0
 
     def __last_ad__(self, last_high, last_low, last_price):
-        return (last_high - last_price) / (last_high - last_low) if last_high != last_low else np.NaN
+        return (last_high - last_price) / (last_high - last_low) if last_high != last_low else 0.0
 
     # def last_cci(self, period_data):
     #     period = 14     # = len(period_data)
