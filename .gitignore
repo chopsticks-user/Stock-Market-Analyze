@@ -17084,3 +17084,11 @@ Stock/Stocks/zvv.us.txt
 Stock/Stocks/zx.us.txt
 Stock/Stocks/zyme.us.txt
 Stock/Stocks/zyne.us.txt
+__pycache__\model.cpython-310.pyc
+__pycache__\environment.cpython-310.pyc
+__pycache__\indicators.cpython-310.pyc
+__pycache__\lin_qn.cpython-310.pyc
+__pycache__\lstm_qn.cpython-310.pyc
+__pycache__\memory.cpython-310.pyc
+__pycache__\structure.cpython-310.pyc
+__pycache__\tools.cpython-310.pyc
