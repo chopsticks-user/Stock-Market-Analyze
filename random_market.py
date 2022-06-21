@@ -3,7 +3,7 @@ import time
 from math import e
 
 def random_price_movement():
-    return np.tanh(np.random.rand() - 0.45) / 10
+    return np.tanh(np.random.rand() - 0.46) / 12
 
 def position(pre_position, price_movement):
     return pre_position * (1 + price_movement)
