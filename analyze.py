@@ -4,13 +4,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import os
 import time
-
-def change(data):
-    changes = np.zeros(len(data))
-    for i in range(1, len(data)):
-        if data[i] != data[i - 1]:
-            changes[i] = (data[i] - data[i - 1]) / data[i - 1]
-    return changes
+from tools import *
 
 stocks_path = "Stock/Data/Stocks"
 etfs_path = "Stock/Data/ETFs"

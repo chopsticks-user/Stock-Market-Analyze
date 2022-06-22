@@ -1,6 +1,13 @@
 import numpy as np
 import math
 
+def change(data):
+    changes = np.zeros(len(data))
+    for i in range(1, len(data)):
+        if data[i] != data[i - 1]:
+            changes[i] = (data[i] - data[i - 1]) / data[i - 1]
+    return changes
+
 def random_price_movement():
     return np.tanh(np.random.rand() - 0.46) / 10
 
