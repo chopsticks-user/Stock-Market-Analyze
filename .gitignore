@@ -8537,3 +8537,10 @@ Stock/Data/Stocks/zvv.us.txt
 Stock/Data/Stocks/zx.us.txt
 Stock/Data/Stocks/zyme.us.txt
 Stock/Data/Stocks/zyne.us.txt
+__pycache__/gbras.cpython-310.pyc
+__pycache__/lstm_model.cpython-310.pyc
+__pycache__/train.cpython-310.pyc
+LSTM/__pycache__/lstm_indicators.cpython-310.pyc
+LSTM/__pycache__/lstm_model.cpython-310.pyc
+LSTM/__pycache__/lstm_train.cpython-310.pyc
+LSTM/__pycache__/train.cpython-310.pyc
