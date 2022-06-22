@@ -1,5 +1,4 @@
-from gbras import GoalBasedRiskAwareSeller
-from LSTM.lstm_train import lstm_train
+from SellAlgorithms.gbras import GoalBasedRiskAwareSeller
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 if __name__ == "__main__":
     seller = GoalBasedRiskAwareSeller()

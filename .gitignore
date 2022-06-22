@@ -1,9 +1,6 @@
-<<<<<<< HEAD
-=======
 __pycache__/lstm_qn.cpython-310.pyc
 __pycache__/memory.cpython-310.pyc
 __pycache__/structure.cpython-310.pyc
->>>>>>> 96f3d106937344ec3f20f893b81bdd378d313652
 Load/Indicator/saved_indc
 Stock/Data/ETFs/aadr.us.txt
 Stock/Data/ETFs/aaxj.us.txt
@@ -17115,3 +17112,11 @@ LSTM/__pycache__/lstm_train.cpython-310.pyc
 LSTM/__pycache__/lstm_model.cpython-310.pyc
 LSTM/__pycache__/lstm_indicators.cpython-310.pyc
 __pycache__/model.cpython-310.pyc
+__pycache__/analyze.cpython-310.pyc
+__pycache__/ragb.cpython-310.pyc
+__pycache__/simulated_market.cpython-310.pyc
+BuyAlgorithms/__pycache__/ragb.cpython-310.pyc
+SellAlgorithms/__pycache__/gbras.cpython-310.pyc
+Ultis/__pycache__/analyze.cpython-310.pyc
+Ultis/__pycache__/simulated_market.cpython-310.pyc
+Ultis/__pycache__/tools.cpython-310.pyc
