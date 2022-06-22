@@ -1,56 +1,63 @@
+from ctypes.wintypes import tagRECT
 import numpy as np
 import time
-from math import e
+import math
+from tools import *
 
-def random_price_movement():
-    return np.tanh(np.random.rand() - 0.46) / 10
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+class GoalBasedRiskAwareSeller(object):
+    def __init__(self, initial_capital = 1000.0, acceptable_profit_rate = 0.04, loss_rate = 0.02, min_loss_rate_factor = 0.1, 
+    loss_acceptable_margin = 0.005, transaction_fee_rate = 0.003):
 
-def position(pre_position, price_movement):
-    return pre_position * (1 + price_movement)
+        self.initial_capital = initial_capital
+        self.capital = initial_capital
 
-def trailing_stop_loss(current_position, last_stop_loss, inital_stop_loss, loss_rate):
-    return max(current_position * (1 - loss_rate), inital_stop_loss, last_stop_loss)
+        self.acceptable_profit_rate = acceptable_profit_rate
 
-def trigger_stop_loss(stop_loss, current_position, acceptable_margin):
-    return current_position <= stop_loss or abs(current_position - stop_loss) <= acceptable_margin * stop_loss
+        self.loss_rate = loss_rate
+        self.min_loss_rate = loss_rate * min_loss_rate_factor
+        self.min_loss_rate_factor = min_loss_rate_factor
+        self.loss_acceptable_margin = loss_acceptable_margin
 
-def adjust_loss_rate(loss_rate, current_position, initial_position, acceptable_profit_rate):
-    profit_rate = (current_position - initial_position) / initial_position
-    if profit_rate <= 0.0:
-        return loss_rate
-    return max(min_loss_rate, loss_rate * e ** (- profit_rate / acceptable_profit_rate))
+        self.initial_stop_loss = 0.0
+        self.stop_loss = 0.0
+        self.adjust_loss_rate = 0.0
 
-transaction_fee_rate = 0.003
-initial_capital = 1000.0
-capital = initial_capital
-acceptable_profit_rate = 0.04
-for i in range(365):
-    current_month = min(i / 30 + 1, 12)
-    for j in range(10):
-        initial_position = min(capital, capital) * (1 - transaction_fee_rate)
-        current_position = initial_position
-        capital -= initial_position / (1 - transaction_fee_rate)
-        loss_rate = 0.02
-        min_loss_rate = loss_rate * 0.1
-        acceptable_margin = 0.005
-        initial_stop_loss = current_position * (1 - loss_rate)
-        stop_loss = initial_stop_loss
+        self.initial_position = 0.0
+        self.current_position = 0.0
+        self.transaction_fee_rate = transaction_fee_rate
 
-        stock_range = 1000
-        for k in range(stock_range):
-            price_movement = random_price_movement()
-            current_position = position(current_position, price_movement)
+        self.n_trades_made = 0
 
-            # print(f"Price Movement: {price_movement}, Position: {current_position}, Stop Loss: {stop_loss}")
-            if trigger_stop_loss(stop_loss, current_position, acceptable_margin) or i == stock_range - 1:
-                capital += current_position * (1 - transaction_fee_rate)
-                # print(capital)
-                break
+    def sell(self, current_price_change = 0.0, most_current_change = False, random_market = False):
+        price_movement = random_price_movement() if random_market else current_price_change
+        self.current_position = position(self.current_position, price_movement)
+        if trigger_stop_loss(self.stop_loss, self.current_position, self.loss_acceptable_margin) or most_current_change:
+            self.capital += self.current_position * (1 - self.transaction_fee_rate)
+            self.n_trades_made += 1
+            return True
+        self.adjusted_loss_rate = adjust_loss_rate(self.loss_rate, self.min_loss_rate, self.current_position, self.initial_position, self.acceptable_profit_rate)
+        self.stop_loss = trailing_stop_loss(self.current_position, self.stop_loss, self.initial_stop_loss, self.adjusted_loss_rate)
+        return False
 
-            stop_loss = trailing_stop_loss(current_position, stop_loss, initial_stop_loss, adjust_loss_rate(loss_rate, current_position, initial_position, acceptable_profit_rate))
-            # time.sleep(0.5)
+    def prepare(self, initial_position = 0.0):
+        if initial_position == 0.0:
+            self.initial_position = self.capital
+        self.initial_position = min(self.initial_position, self.capital) * (1 - self.transaction_fee_rate)
+        self.current_position = self.initial_position
+        self.capital -= self.initial_position / (1 - self.transaction_fee_rate)
+        self.min_loss_rate = self.loss_rate * 0.1
+        self.initial_stop_loss = self.current_position * (1 - self.loss_rate)
+        self.stop_loss = self.initial_stop_loss
 
-        if capital >= initial_capital * (1 + acceptable_profit_rate):
-            break
+    def target_achieved(self, greedy = False):
+        if not greedy and self.capital >= self.initial_capital * (1 + self.acceptable_profit_rate):
+            return True
+        return False
 
-    print(f"Date {i + 1}, Capital: {capital}")
+    def current_state(self):
+        return
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+
