@@ -3,7 +3,7 @@ import time
 from math import e
 
 def random_price_movement():
-    return np.tanh(np.random.rand() - 0.45) / 10
+    return np.tanh(np.random.rand() - 0.46) / 10
 
 def position(pre_position, price_movement):
     return pre_position * (1 + price_movement)
@@ -36,12 +36,13 @@ for i in range(365):
         initial_stop_loss = current_position * (1 - loss_rate)
         stop_loss = initial_stop_loss
 
-        for k in range(1000):
+        stock_range = 1000
+        for k in range(stock_range):
             price_movement = random_price_movement()
             current_position = position(current_position, price_movement)
 
             # print(f"Price Movement: {price_movement}, Position: {current_position}, Stop Loss: {stop_loss}")
-            if trigger_stop_loss(stop_loss, current_position, acceptable_margin):
+            if trigger_stop_loss(stop_loss, current_position, acceptable_margin) or i == stock_range - 1:
                 capital += current_position * (1 - transaction_fee_rate)
                 # print(capital)
                 break
