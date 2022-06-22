@@ -1,11 +1,9 @@
-import numpy as np
-import pandas as pd
 from collections import deque
 import itertools
 
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 # assume data type is pandas series
-class Indicators(object):
+class LSTMIndicators(object):
     def __init__(self, capacity = 10000, periods = [14, 30, 100]):
         self.n_periods = 3
         self.periods = periods

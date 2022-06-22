@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+=======
+__pycache__/lstm_qn.cpython-310.pyc
+__pycache__/memory.cpython-310.pyc
+__pycache__/structure.cpython-310.pyc
+>>>>>>> 96f3d106937344ec3f20f893b81bdd378d313652
 Load/Indicator/saved_indc
 Stock/Data/ETFs/aadr.us.txt
 Stock/Data/ETFs/aaxj.us.txt
@@ -1395,8 +1401,11 @@ Stock/Data/Stocks/ac.us.txt
 Stock/Data/Stocks/acad.us.txt
 Stock/Data/Stocks/acbi.us.txt
 Stock/Data/Stocks/acc.us.txt
+<<<<<<< HEAD
 Stock/Data/Stocks/acco.us.txt
 Stock/Data/Stocks/accp.us.txt
+=======
+>>>>>>> 96f3d106937344ec3f20f893b81bdd378d313652
 Stock/Data/Stocks/acer.us.txt
 Stock/Data/Stocks/acerw.us.txt
 Stock/Data/Stocks/acet.us.txt
@@ -1680,7 +1689,10 @@ Stock/Data/Stocks/ampe.us.txt
 Stock/Data/Stocks/amph.us.txt
 Stock/Data/Stocks/amrb.us.txt
 Stock/Data/Stocks/amrc.us.txt
+<<<<<<< HEAD
 Stock/Data/Stocks/amrh.us.txt
+=======
+>>>>>>> 96f3d106937344ec3f20f893b81bdd378d313652
 Stock/Data/Stocks/amrhw.us.txt
 Stock/Data/Stocks/amrk.us.txt
 Stock/Data/Stocks/amrn.us.txt
@@ -17092,3 +17104,14 @@ __pycache__\lstm_qn.cpython-310.pyc
 __pycache__\memory.cpython-310.pyc
 __pycache__\structure.cpython-310.pyc
 __pycache__\tools.cpython-310.pyc
+tools.py
+__pycache__/gbras.cpython-310.pyc
+__pycache__/lstm_model.cpython-310.pyc
+__pycache__/model.cpython-310.pyc
+__pycache__/train.cpython-310.pyc
+analyze.py
+LSTM/__pycache__/train.cpython-310.pyc
+LSTM/__pycache__/lstm_train.cpython-310.pyc
+LSTM/__pycache__/lstm_model.cpython-310.pyc
+LSTM/__pycache__/lstm_indicators.cpython-310.pyc
+__pycache__/model.cpython-310.pyc
