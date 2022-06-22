@@ -8541,3 +8541,11 @@ Stock/Data/Stocks/zyne.us.txt
 __pycache__/lin_qn.cpython-310.pyc
 __pycache__/indicators.cpython-310.pyc
 __pycache__/environment.cpython-310.pyc
+__pycache__/gbras.cpython-310.pyc
+__pycache__/lstm_model.cpython-310.pyc
+__pycache__/tools.cpython-310.pyc
+__pycache__/train.cpython-310.pyc
+LSTM/__pycache__/lstm_indicators.cpython-310.pyc
+LSTM/__pycache__/lstm_model.cpython-310.pyc
+LSTM/__pycache__/lstm_train.cpython-310.pyc
+LSTM/__pycache__/train.cpython-310.pyc
